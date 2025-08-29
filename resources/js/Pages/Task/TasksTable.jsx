@@ -7,7 +7,7 @@ import TextInput from '@/Components/TextInput';
 import SelectInput from '@/Components/SelectInput';
 import { Link, router } from '@inertiajs/react';
 
-function TasksTable({tasks, queryParams}) {
+function TasksTable({tasks, queryParams,routeName,routeParams={}}) {
 
      queryParams = queryParams || {};
     
@@ -18,7 +18,7 @@ function TasksTable({tasks, queryParams}) {
                 delete queryParams[name];
             }
     
-            router.get(route('task.index', queryParams));
+            router.get(route('task.index',routeParams || {}, queryParams));
         }
         const sortChanged = (name, e) => {
             if(name === queryParams.sort_field){
@@ -28,11 +28,14 @@ function TasksTable({tasks, queryParams}) {
                     queryParams.sort_direction = 'asc';
                 }
             } else{
-                queryParams.sort_field = name;
+                queryParams.sort_field = name; 
                 queryParams.sort_direction = 'asc';
             }
-    
-            router.get(route('task.index', queryParams));
+            router.get(
+                route(routeName, { ...routeParams, ...queryParams }),
+                {},
+                { preserveScroll: true, preserveState: true }
+            );
         }
 
     const onKeyPress = (name, e) => {
