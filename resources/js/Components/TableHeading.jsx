@@ -1,8 +1,10 @@
 import React from 'react'
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { router } from '@inertiajs/react';
 
-function TableHeading({name,sort_field=null, sort_direction=null, sortable=true}) {
+function TableHeading({name,sortChanged = () => {}, sort_field=null, sort_direction=null, sortable=true}) {
 
+    
     
   return (
     <th onClick={(e)=> sortChanged(name, e)} className='px-3 py-2'>
