@@ -1,12 +1,48 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { Head, Link } from '@inertiajs/react'
+import { Head, Link, router } from '@inertiajs/react'
 import React from 'react'
-import { Edit, Trash2 } from "lucide-react";
+import {  ChevronDown, ChevronUp, Edit, Trash2 } from "lucide-react";
 import Pagination from '@/Components/Pagination';
 import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from '@/lib/Constants.jsx';
+import TextInput from '@/Components/TextInput';
+import SelectInput from '@/Components/SelectInput';
+import TableHeading from '@/Components/TableHeading';
 
-function index({ projects }) {
-    console.log(projects);
+function index({ projects, queryParams = null }) {
+
+    queryParams = queryParams || {};
+
+    const serachField = (name, value) => {
+        if(value){
+            queryParams[name] = value;
+        } else{
+            delete queryParams[name];
+        }
+
+        router.get(route('project.index', queryParams));
+    }
+    const onKeyPress = (name, e) => {
+        if(e.key !== 'Enter') return;
+        
+        serachField(name, e.target.value);
+    }
+
+    const sortChanged = (name) => {
+        if(name === queryParams.sort_field){
+            if(queryParams.sort_direction === 'asc'){
+                queryParams.sort_direction = 'desc';
+            } else{
+                queryParams.sort_direction = 'asc';
+            }
+        } else{
+            queryParams.sort_field = name;
+            queryParams.sort_direction = 'asc';
+        }
+
+        router.get(route('project.index', queryParams));
+    }
+        
+    
     return (
         <AuthenticatedLayout
             header={
@@ -24,14 +60,47 @@ function index({ projects }) {
                             <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
                                 <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                                     <tr className='text-nowrap'>
-                                        <th className='px-3 py-2'>ID</th>
-                                        <th className='px-3 py-2'>Image</th>
-                                        <th className='px-3 py-2'>Name</th>
-                                        <th className='px-3 py-2'>Status</th>
-                                        <th className='px-3 py-2'>Create date</th>
-                                        <th className='px-3 py-2'>Due Date</th>
-                                        <th className='px-3 py-2'>Created By</th>
+                                        <TableHeading name="id" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction}/>
+                                        <th onClick={(e)=> sortChanged('image', e)} className='px-3 py-2'>Image</th>
+                                        <th onClick={(e)=> sortChanged('name', e)} className='px-3 py-2'>
+                                            <div className='flex items-center justify-between gap-2'>Name
+                                                <div>
+                                                    <ChevronUp className='w-4' color={queryParams.sort_field === 'name' && queryParams.sort_direction === 'asc' ? '#4846e2' : '#ccc'}/>
+                                                    <ChevronDown className='w-4 -mt-2' color={queryParams.sort_field === 'name' && queryParams.sort_direction === 'desc' ? '#4846e2' : '#ccc'}/>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <th onClick={(e)=> sortChanged('status', e)} className='px-3 py-2'>Status</th>
+                                        <th onClick={(e)=> sortChanged('created_at', e)} className='px-3 py-2'>Create date</th>
+                                        <th onClick={(e)=> sortChanged('due_date', e)} className='px-3 py-2'>Due Date</th>
+                                        <th onClick={(e)=> sortChanged('created_by', e)} className='px-3 py-2'>Created By</th>
                                         <th className='px-3 py-2 text-center'>Actions</th>
+                                    </tr>
+                                </thead>
+                                <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
+                                    <tr className='text-nowrap'>
+                                        <th className='px-3 py-2'></th>
+                                        <th className='px-3 py-2'></th>
+                                        <th className='px-3 py-2'>
+                                            <TextInput className='w-full'
+                                            defaultValue={queryParams?.name}
+                                               placeholder='Project Name'
+                                               onBlur={(e) => serachField('name', e.target.value)}
+                                               onKeyPress={(e) => onKeyPress('name', e.target.value)}
+                                            />
+                                        </th>
+                                        <th className='px-3 py-2'>
+                                            <SelectInput className='w-full' onChange={(e) => serachField('status', e.target.value)} defaultValue={queryParams?.status}>
+                                                <option value="">Status</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="in_progress">In Progress</option>
+                                                <option value="completed">Completed</option>
+                                            </SelectInput>
+                                        </th>
+                                        <th className='px-3 py-2'></th>
+                                        <th className='px-3 py-2'></th>
+                                        <th className='px-3 py-2'></th>
+                                        <th className='px-3 py-2 text-center'></th>
                                     </tr>
                                 </thead>
                                 <tbody>
