@@ -100,7 +100,7 @@ function index({ projects, queryParams = null }) {
                                         projects.data.map((project) => (
                                             <tr key={project.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
                                                 <th className='px-3 py-2'>{project.id}</th>
-                                                <td className='px-3 py-2'><img src={project.image_path}/></td>
+                                                <td className='px-3 py-2'><img style={{height:'100px',width:'100px'}} src={project.image_path}/></td>
                                                 <td className='px-3 py-2 cursor-pointer hover:text-blue-600 hover'>
                                                     <Link href={(route('project.show', project.id))}>{project.name}</Link>
                                                 </td>
