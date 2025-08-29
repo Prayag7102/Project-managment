@@ -7,7 +7,7 @@ import TextInput from '@/Components/TextInput';
 import SelectInput from '@/Components/SelectInput';
 import { Link, router } from '@inertiajs/react';
 
-function TasksTable({tasks, queryParams,routeName,routeParams={}}) {
+function TasksTable({tasks, queryParams,routeName,routeParams={}, hidePorjectColumn=false}) {
 
      queryParams = queryParams || {};
     
@@ -50,6 +50,7 @@ function TasksTable({tasks, queryParams,routeName,routeParams={}}) {
                     <tr className='text-nowrap'>
                         <TableHeading sortChanged={sortChanged} name="id" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} />
                         <th className='px-3 py-2'>Image</th>
+                        {!hidePorjectColumn && (<th className='px-3 py-2'>Project Name</th>)}
                         <TableHeading sortChanged={sortChanged} name="name" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} />
                         <th className='px-3 py-2'>Status</th>
                         <th className='px-3 py-2'>Create date</th>
@@ -62,13 +63,14 @@ function TasksTable({tasks, queryParams,routeName,routeParams={}}) {
                     <tr className='text-nowrap'>
                         <th className='px-3 py-2'></th>
                         <th className='px-3 py-2'></th>
+                        {!hidePorjectColumn && (<th className='px-3 py-2'></th>)}
                         <th className='px-3 py-2'>
                             <TextInput className='w-full'
                                 defaultValue={queryParams?.name}
                                 placeholder='Task Name'
                                 onBlur={(e) => serachField('name', e.target.value)}
                                 onKeyPress={(e) => onKeyPress('name', e.target.value)}
-                            />
+                                />
                         </th>
                         <th className='px-3 py-2'>
                             <SelectInput className='w-full' onChange={(e) => serachField('status', e.target.value)} defaultValue={queryParams?.status}>
@@ -90,6 +92,7 @@ function TasksTable({tasks, queryParams,routeName,routeParams={}}) {
                             <tr key={task.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
                                 <th className='px-3 py-2'>{task.id}</th>
                                 <td className='px-3 py-2'><img style={{height:'100px',width:'100px'}} src={task.image_path} /></td>
+                                {!hidePorjectColumn && (<td className='px-3 py-2'>{task.project.name}</td>)}
                                 <td className='px-3 py-2'>{task.name}</td>
                                 <td className='px-3 py-2'>
                                     <span className={`px-2 py-1 rounded text-white ${TASK_STATUS_CLASS_MAP[task.status]}`}>
