@@ -16,11 +16,11 @@ function Create() {
     due_date: "",
   });
 
-  console.log(useForm());
 
   const onSubmit = (e) => {
     e.preventDefault();
-    post(route("project.store"), { onSuccess: () => reset() });
+    post(route("project.store"));
+    console.log(errors);
   };
   return (
     <AuthenticatedLayout

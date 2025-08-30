@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\TaskResource;
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -28,7 +29,7 @@ class ProjectController extends Controller
         }
 
         $projects = $query->orderBy($sortField,$sortDirection)->paginate(10)->onEachSide(1);
-        return inertia('Project/Index', ['projects' => ProjectResource::collection($projects),'queryParams' => request()->query()?: null]);
+        return inertia('Project/Index', ['projects' => ProjectResource::collection($projects),'queryParams' => request()->query()?: null,'success' => session('success')]);
     }
 
     /**
@@ -46,6 +47,12 @@ class ProjectController extends Controller
     {
         $data = $request->validated();
         dd($data);
+        // $data['created_by'] = Auth::id();
+        // $data['updated_by'] = Auth::id();
+        // Project::create($data);
+
+        return redirect()->route('project.index')
+        ->with('success', 'Project created successfully');
     }
 
     /**

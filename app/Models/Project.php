@@ -11,6 +11,17 @@ class Project extends Model
     use HasFactory;
 
 
+    protected $fillable = [
+        'name',
+        'description',
+        'due_date',
+        'status',
+        'image_path',
+        'created_by',
+        'updated_by',
+    ];
+
+
     public function tasks(){
         return $this->hasMany(Task::class);
     }

@@ -22,9 +22,11 @@ class StoreProjectRequest extends FormRequest
      */
     public function rules(): array
     {
+        dd(request()->all());
         return [
+
             "name" => ['required', 'max:255'],
-            // 'image' => ['nullable', 'image'],
+            'image' => ['nullable', 'image'],
             "description" => ['nullable', 'string'],
             'due_date' => ['nullable', 'date'],
             'status' => ['required', Rule::in(['pending', 'in_progress', 'completed'])]
