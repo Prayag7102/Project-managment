@@ -3,7 +3,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head } from '@inertiajs/react';
 
 function Edit({project}) {
-    console.log(project);
   return (
     <AuthenticatedLayout
         header={

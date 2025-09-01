@@ -20,7 +20,6 @@ function Create() {
   const onSubmit = (e) => {
     e.preventDefault();
     post(route("project.store"));
-    console.log(errors);
   };
   return (
     <AuthenticatedLayout

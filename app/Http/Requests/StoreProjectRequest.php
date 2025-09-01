@@ -22,7 +22,6 @@ class StoreProjectRequest extends FormRequest
      */
     public function rules(): array
     {
-        dd(request()->all());
         return [
 
             "name" => ['required', 'max:255'],

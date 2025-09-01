@@ -43,6 +43,13 @@ function index({ projects, queryParams = null, success }) {
 
         serachField(name, e.target.value);
     }
+
+    const handleDetele = (project) => {
+        if (!confirm("Are you sure want to delete this record?")) {
+            return;
+        }
+        router.delete(route('project.destroy', project.id));
+    }
     return (
         <AuthenticatedLayout
             header={
@@ -139,6 +146,7 @@ function index({ projects, queryParams = null, success }) {
                                                         </Link>
 
                                                         <button
+                                                            onClick={(e) =>  handleDetele(project)}
                                                             className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-600 text-white 
                                                             hover:bg-red-700 transition-colors duration-200 shadow-md"
                                                         >
