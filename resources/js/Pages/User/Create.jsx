@@ -7,31 +7,28 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 import React from "react";
 
-function Edit({project}) {
+function Create() {
   const { data, setData, post, errors, reset } = useForm({
-    image:"",
-    name: project.name || "",
-    status: project.status || "",
-    description: project.description || "",
-    due_date: project.due_date || "",
-    status: project.status || "",
-    _method: 'PUT',
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
   });
 
 
   const onSubmit = (e) => {
     e.preventDefault();
-    post(route("project.update",project.id));
+    post(route("user.store"));
   };
   return (
     <AuthenticatedLayout
       header={
         <h2 className="text-xl font-semibold leading-tight text-gray-800">
-          Edit Project
+          Create User
         </h2>
       }
     >
-      <Head title="Create project" />
+      <Head title="Create user" />
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -40,30 +37,26 @@ function Edit({project}) {
               onSubmit={onSubmit}
               className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"
             >
-                {project.image_path && (
-                    <div className="mb-4">
-                        <img src={project.image_path} alt={project.name} className="w-32 h-32 object-cover rounded"/>
-                    </div>
-                )}
-              <div>
-                <InputLabel
-                  htmlFor="project_image_path"
-                  value="Project Image"
-                />
-                <TextInput
-                  id="project_image_path"
-                  type="file"
-                  name="image"
-                  className="mt-1 block w-full"
-                  onChange={(e) => setData("image", e.target.files[0])}
-                />
-                <InputError message={errors.image} className="mt-2" />
-              </div>
               <div className="mt-4">
-                <InputLabel htmlFor="project_name" value="Project Name" />
+                <InputLabel htmlFor="user_name" value="User Name" />
 
                 <TextInput
-                  id="project_name"
+                  id="user_name"
+                  type="text"
+                  name="name"
+                  value={data.name}
+                  className="mt-1 block w-full"
+                  isFocused={true}
+                  onChange={(e) => setData("name", e.target.value)}
+                />
+
+                <InputError message={errors.name} className="mt-2" />
+              </div>
+              <div className="mt-4">
+                <InputLabel htmlFor="user_name" value="User Name" />
+
+                <TextInput
+                  id="user_name"
                   type="text"
                   name="name"
                   value={data.name}
@@ -77,12 +70,12 @@ function Edit({project}) {
 
               <div className="mt-4">
                 <InputLabel
-                  htmlFor="project_description"
-                  value="Project Description"
+                  htmlFor="user_description"
+                  value="User Description"
                 />
 
                 <TextAreaInput
-                  id="project_description"
+                  id="user_description"
                   name="description"
                   value={data.description}
                   className="mt-1 block w-full"
@@ -93,12 +86,12 @@ function Edit({project}) {
               </div>
               <div className="mt-4">
                 <InputLabel
-                  htmlFor="project_due_date"
-                  value="Project Deadline"
+                  htmlFor="user_due_date"
+                  value="User Deadline"
                 />
 
                 <TextInput
-                  id="project_due_date"
+                  id="user_due_date"
                   type="date"
                   name="due_date"
                   value={data.due_date}
@@ -109,11 +102,11 @@ function Edit({project}) {
                 <InputError message={errors.due_date} className="mt-2" />
               </div>
               <div className="mt-4">
-                <InputLabel htmlFor="project_status" value="Project Status" />
+                <InputLabel htmlFor="user_status" value="User Status" />
 
                 <SelectInput
                   name="status"
-                  id="project_status"
+                  id="user_status"
                   className="mt-1 block w-full"
                   onChange={(e) => setData("status", e.target.value)}
                 >
@@ -123,11 +116,11 @@ function Edit({project}) {
                   <option value="completed">Completed</option>
                 </SelectInput>
 
-                <InputError message={errors.project_status} className="mt-2" />
+                <InputError message={errors.user_status} className="mt-2" />
               </div>
               <div className="mt-4 text-right">
                 <Link
-                  href={route("project.index")}
+                  href={route("user.index")}
                   className="bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2"
                 >
                   Cancel
@@ -145,4 +138,4 @@ function Edit({project}) {
   );
 }
 
-export default Edit;
+export default Create;
