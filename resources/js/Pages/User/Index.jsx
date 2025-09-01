@@ -119,7 +119,7 @@ function index({ users, queryParams = null, success }) {
                                                     <Link href={(route('user.show', user.id))}>{user.name}</Link>
                                                 </td>
                                                 <td className='px-3 py-2'>
-                                                    <span className={`px-2 py-1 rounded text-white`}>
+                                                    <span className={`px-2 py-1 rounded text-black`}>
                                                         {user.email}
                                                     </span>
                                                 </td>

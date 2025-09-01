@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Http\Resources\UserCrudResource;
 
 class UserController extends Controller
 {
@@ -27,7 +27,7 @@ class UserController extends Controller
         }
 
         $users = $query->orderBy($sortField,$sortDirection)->paginate(10)->onEachSide(1);
-        return inertia('User/Index', ['users' => UserResource::collection($users),'queryParams' => request()->query()?: null,'success' => session('success')]);
+        return inertia('User/Index', ['users' => UserCrudResource::collection($users),'queryParams' => request()->query()?: null,'success' => session('success')]);
     }
 
     /**
@@ -35,7 +35,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('User/Create');
     }
 
     /**
@@ -43,7 +43,11 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        //
+        $data = $request->validated();
+        $data['password'] = bcrypt($data['password']);
+        User::create($data);
+        return redirect()->route('user.index')
+        ->with('success', 'User created successfully');
     }
 
     /**
@@ -59,7 +63,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        return inertia('User/Edit',['user' => new UserCrudResource($user)]);
     }
 
     /**
