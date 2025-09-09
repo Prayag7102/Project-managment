@@ -44,6 +44,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $data = $request->validated();
+        $data['email_verified_at'] = time(); 
         $data['password'] = bcrypt($data['password']);
         User::create($data);
         return redirect()->route('user.index')
@@ -71,7 +72,16 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        $data = $request->validated();
+        $password = $data['password'] ?? null;
+        if($password){
+            $data['password'] = bcrypt($data['password']);
+        } else{
+            unset($data['password']);
+        }
+        $user->update($data);
+        return redirect()->route('user.index')
+        ->with('success', 'User "' . $user->name . '" updated successfully');
     }
 
     /**
@@ -79,6 +89,9 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $name = $user->name;
+        $user->delete();
+        return redirect()->route('user.index')
+        ->with('success', 'User "' . $name . '" deleted successfully');
     }
 }
